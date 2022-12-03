@@ -1,0 +1,18 @@
+each rucksack has two large compartments
+All items of a given type are meant to go into exactly one of the two compartments
+a list of all of the items currently in each rucksack (your puzzle input)
+a and A refer to different types of items
+each rucksack is given as characters all on a single line
+the first half of the characters represent items in the first compartment, while the second half of the characters represent items in the second compartment
+
+To help prioritize item rearrangement, every item type can be converted to a priority:
+    Lowercase item types a through z have priorities 1 through 26.
+    Uppercase item types A through Z have priorities 27 through 52.
+
+Part 1
+Find the item type that appears in both compartments of each rucksack. What is the sum of the priorities of those item types?
+
+Part 2
+Every set of three lines in your list corresponds to a single group, but each group can have a different badge item type
+the badge is the only item type carried by all three Elves
+Find the item type that corresponds to the badges of each three-Elf group. What is the sum of the priorities of those item types?

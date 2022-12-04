@@ -1,0 +1,9 @@
+Elves have been assigned the job of cleaning up sections of the camp. Every section has a unique ID number, and each Elf is assigned a range of section IDs.
+many of the assignments overlap
+big list of the section assignments for each pair (your puzzle input)
+
+Part 1
+In how many assignment pairs does one range fully contain the other?
+
+Part 2
+In how many assignment pairs do the ranges overlap?

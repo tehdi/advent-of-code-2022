@@ -1,0 +1,10 @@
+a drawing of the starting stacks of crates and the rearrangement procedure (your puzzle input)
+In each step of the procedure, a quantity of crates is moved from one stack to a different stack
+
+Part 1
+Crates are moved one at a time, so the first crate to be moved ends up below subsequent crates
+After the rearrangement procedure completes, what crate ends up on top of each stack?
+
+Part 2
+the crane can move multiple crates at once and maintain their order
+Now what do the tops look like at the end?

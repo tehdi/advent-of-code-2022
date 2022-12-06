@@ -1,0 +1,13 @@
+detect a start-of-packet marker in the datastream
+indicated by a sequence of four characters that are all different
+identify the first position where the four most recently received characters were all different
+
+Specifically, it needs to report the number of characters from the beginning of the buffer to the end of the first such four-character marker.
+
+Part 1
+How many characters need to be processed before the first start-of-packet marker is detected?
+
+Part 2
+A start-of-message marker is just like a start-of-packet marker, except it consists of 14 distinct characters rather than 4.
+How many characters need to be processed before the first start-of-message marker is detected?
+

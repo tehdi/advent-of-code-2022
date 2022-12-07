@@ -1,0 +1,21 @@
+lines that begin with $ are commands you executed
+    cd and ls
+
+cd commands have no output
+cd x, cd .., and cd / all do what I expect them to do
+there are no more cd commands
+
+ls prints out all of the files and directories immediately contained by the current directory
+it's always just `ls`
+a file prints as "123 abc", meaning file named "abc" has size 123
+a directory prints as "dir xyz"
+
+directories don't have intrinsic size. instead their size is the sum of all files they contain
+INCLUDING SUBDIRECTORIES (so nested files get counted once for their immediate parent, then again for their grandparents)
+
+Part 1
+Find all of the directories with a total size of at most 100_000. What is the sum of the total sizes of those directories?
+
+Part 2
+The total disk space available to the filesystem is 70_000_000. To run the update, you need unused space of at least 30_000_000.
+What is the total size of the smallest directory that, if deleted, would free up enough space on the filesystem to run the update?

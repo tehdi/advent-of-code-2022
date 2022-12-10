@@ -1,0 +1,32 @@
+The clock circuit ticks at a constant rate; each tick is called a cycle.
+The CPU has a single register, X, which starts with the value 1
+It supports only two instructions:
+    - addx V takes two cycles to complete. After two cycles, the X register is increased by the value V. (V can be negative.)
+    - noop takes one cycle to complete. It has no other effect.
+signal strength is the cycle number multiplied by the value of the X register
+
+register modifications happen at the END of a cycle.
+you can't queue up a new instruction while you're still processing an old one
+    $ addx 3
+    $ addx 5
+    cycle 1: addx 3 starts processing
+    cycle 2: addx 3 finishes processing. value becomes 4
+    cycle 3: addx 5 starts processing
+    cycle 4: addx 5 finishes processing. value becomes 9
+
+Part 1
+Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles.
+What is the sum of these six signal strengths?
+
+Part 2
+X register controls the horizontal position of a sprite
+    THERE IS ONLY ONE SPRITE
+    IF THE REGISTER CHANGES, THE SPRITE MOVES
+the sprite is 3 pixels wide
+the X register sets the horizontal position of the middle of that sprite
+there is no "vertical position": if the sprite's horizontal position puts its pixels where the CRT is currently drawing, then those pixels will be drawn
+draws each row of pixels left-to-right
+40 wide and 6 high
+    - left-most pixel in each row is in position 0
+    - right-most pixel in each row is in position 39
+draws a single pixel DURING each cycle

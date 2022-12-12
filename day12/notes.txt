@@ -1,0 +1,21 @@
+oh hey, it's pathfinding day
+
+input = heightmap
+elevation of each square = single lowercase letter, where a is the lowest and z is the highest
+current position = S (elevation a)
+target = E (elevation z)
+for each step, I can move 1 up, down, left, or right
+each step can be at most 1 elevation rank higher
+
+
+Part 1
+What is the fewest steps required to move from your current position to the location that should get the best signal?
+fewest steps for test input: 31
+
+Part 2
+What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal (E)?
+fewest steps for test input: 29
+
+alternatively, start at E and find the closest a
+while allowing any level of climb, but only 1 level of drop
+because backwards

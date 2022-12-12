@@ -1,0 +1,48 @@
+I fell off a rickety rope bridge, the Elves abandoned me, and now I'm being mugged by monkeys.
+
+the monkeys operate based on how worried you are about each item
+    assholes
+
+
+Starting items: your worry level for each item the monkey is currently holding, in the order they will be inspected.
+Operation: how your worry level changes as that monkey inspects an item.
+Test: how the monkey uses your worry level to decide where to throw an item next.
+
+After each monkey inspects an item but before it tests your worry level, your relief that the monkey's inspection didn't damage the item causes your worry level to be divided by three and rounded down to the nearest integer.
+
+for each round:
+    for each monkey:
+        for each held item in the order listed:
+            inspect -> then worry /= 3
+            throw -> append to end of recipient monkey's list
+
+eg:
+Monkey 0:
+  Starting items: 79, 98
+  Operation: new = old * 19
+  Test: divisible by 23
+    If true: throw to monkey 2
+    If false: throw to monkey 3
+Monkey 0:
+  Monkey inspects an item with a worry level of 79.
+    Worry level is multiplied by 19 to 1501.
+    Monkey gets bored with item. Worry level is divided by 3 to 500.
+    Current worry level is not divisible by 23.
+    Item with worry level 500 is thrown to monkey 3.
+
+monkeys will throw all items they're holding, including the ones they just received earlier this round
+
+Count the total number of times each monkey inspects items over 20 rounds
+in the test input:
+    Monkey 0 inspected items 101 times.
+    Monkey 1 inspected items 95 times.
+    Monkey 2 inspected items 7 times.
+    Monkey 3 inspected items 105 times.
+focus on the two most active monkeys
+The level of monkey business in this situation can be found by multiplying these together: 101 * 105 = 10605.
+
+Part 1
+What is the level of monkey business by the top 2 most active monkeys after 20 rounds of stuff-slinging simian shenanigans?
+
+Part 2
+Worry levels are no longer divided by three after each item is inspected; you'll need to find another way to keep your worry levels manageable. Starting again from the initial state in your puzzle input, what is the level of monkey business after 10000 rounds?

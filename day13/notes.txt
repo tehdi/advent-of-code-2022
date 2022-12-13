@@ -1,0 +1,20 @@
+the packets from the distress signal got decoded out of order
+how many pairs of packets are in the right order?
+Packet data consists of lists and integers.
+Each list
+    - starts with [
+    - ends with ]
+    - contains zero or more comma-separated values (either integers or other lists)
+Each packet is always a list and appears on its own line.
+
+Comparing packets (left vs right):
+    go value by value
+    as soon as there's an integer difference, return left < right
+    if both are lists, compare the lists value by value. lower integer should always come first
+    if list comparison and integers keep being okay, but the right list runs out of values first, then it's out of order
+    if one is an integer and one is a list, convert the integer to a single-item list and compare the lists as above
+
+Part 1
+Determine which pairs of packets are already in the right order.
+The first pair has index 1, the second pair has index 2, and so on.
+What is the sum of the indices of those pairs?

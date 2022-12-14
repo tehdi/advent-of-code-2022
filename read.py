@@ -4,7 +4,7 @@ logging.basicConfig(
     format='%(message)s',
     level=logging.DEBUG,
     # level=logging.INFO,
-    # filename='output.log
+    # filename='output.log'
 )
 
 if __name__ == '__main__':

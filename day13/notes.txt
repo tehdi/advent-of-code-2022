@@ -18,3 +18,12 @@ Part 1
 Determine which pairs of packets are already in the right order.
 The first pair has index 1, the second pair has index 2, and so on.
 What is the sum of the indices of those pairs?
+
+Part 2
+Organize all of the packets into the correct order.
+What is the decoder key for the distress signal?
+
+decoder key = 1-based indices of the two divider packets multiplied together
+you have to add the divider packets to the distress signal yourself:
+    [[2]]
+    [[6]]

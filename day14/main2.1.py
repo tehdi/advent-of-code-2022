@@ -2,9 +2,9 @@ import logging
 
 logging.basicConfig(
     format='%(message)s',
-    level=logging.DEBUG,
-    # level=logging.INFO,
-    filename='part2.1.log'
+    # level=logging.DEBUG,
+    level=logging.INFO,
+    # filename='part2.1.log'
 )
 
 AIR = 'air'
@@ -108,12 +108,12 @@ if __name__ == '__main__':
     x_range = range(min_x, max_x + 1)
     y_range = range(min_y, max_y + 1)
     sand_origin = (500, 0)
-    print_cave(min_y, max_y, min_x, max_x, sand_origin, cave, logging.info)
+    # print_cave(min_y, max_y, min_x, max_x, sand_origin, cave, logging.info)
     origin = Node(None, sand_origin, True)
     drop_point = origin
     sand_units = 0
     while True:
-        print_cave(min_y, max_y, min_x, max_x, drop_point.location, cave, logging.debug)
+        # print_cave(min_y, max_y, min_x, max_x, drop_point.location, cave, logging.debug)
         if drop_point.down is None:
             down = (drop_point.location[0], drop_point.location[1] + 1)
             drop_point.down = Node(drop_point, down, find_value(down, cave, max_y))
@@ -145,5 +145,5 @@ if __name__ == '__main__':
         else:
             drop_point = next_fall
 
-    print_cave(min_y, max_y, min_x, max_x, sand_origin, cave, logging.info)
+    # print_cave(min_y, max_y, min_x, max_x, sand_origin, cave, logging.info)
     logging.info(f"{sand_units} units of sand were added to the map")

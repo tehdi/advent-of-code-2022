@@ -43,7 +43,8 @@ B21: 2_037_055
 Part 2
 distress beacon must have x and y coordinates each no lower than 0 and no larger than 4_000_000
 tuning frequency can be found by multiplying its x coordinate by 4_000_000 and then adding its y coordinate
+What is the tuning frequency of the distress beacon?
 Test
-search space is smaller: x and y coordinates can each be at most 20
+search space is smaller: x and y coordinates can each be at most 20 (0 <= . <= 20 ?)
 => x=14, y=11
 The tuning frequency for this distress beacon is 56000011

@@ -15,6 +15,16 @@ def extract_locations(line_pattern, line):
     beacon = (int(m.group(3)), int(m.group(4)))
     return (sensor, beacon)
 
+def locate_sensors(input_data):
+    sensors = []
+    line_pattern = re.compile("Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)")
+    for sensor_id,line in enumerate(input_data):
+        sensor, beacon = extract_locations(line_pattern, line)
+        radius = calculate_radius(sensor, beacon)
+        corners = (sensor[0] - radius, sensor[0] + radius, sensor[1] - radius, sensor[1] + radius)
+        sensors.append((sensor, radius, corners))
+    return sensors
+
 def calculate_radius(sensor, beacon):
     return abs(sensor[0] - beacon[0]) + abs(sensor[1] - beacon[1]) + 1
 
@@ -36,22 +46,9 @@ def find_perimeter_points(midpoint, radius, coord_max):
         for x in usable_xs:
             for y in usable_ys:
                 yield (x, y)
-                # points.add((x, y))
-    # return points
 
-# def find_all_points(midpoint, radius):
-#     points = set()
-#     for y_offset in range(radius + 1):
-#         radius_here = radius - y_offset
-#         for x_offset in range(radius_here):
-#             points.add((midpoint[0] + x_offset, midpoint[1] + y_offset))
-#             points.add((midpoint[0] + x_offset, midpoint[1] - y_offset))
-#             points.add((midpoint[0] - x_offset, midpoint[1] + y_offset))
-#             points.add((midpoint[0] - x_offset, midpoint[1] - y_offset))
-#     return points
-
-def can_see(midpoint, radius, target):
-    return calculate_radius(midpoint, target) <= radius
+def can_see(midpoint, radius, corners, target):
+    return (corners[0] <= target[0] <= corners[1]) and (corners[2] <= target[1] <= corners[3]) and (calculate_radius(midpoint, target) <= radius)
 
 TEST = 'test'
 CUSTOM = 'custom'
@@ -71,39 +68,19 @@ if __name__ == '__main__':
     with open(filename) as input_file:
         input_data = [line.rstrip('\n') for line in input_file]
 
-    sensors = []
-    line_pattern = re.compile("Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)")
-    covered_area = defaultdict(set)
-    for sensor_id,line in enumerate(input_data):
-        sensor, beacon = extract_locations(line_pattern, line)
-        radius = calculate_radius(sensor, beacon)
-        sensors.append((sensor, radius))
-
-    # diamonds = set()
-    # for (sensor, radius) in sensors:
-    #     logging.debug(f"Checking sensor {sensor} with radius {radius}")
-    #     edges = find_all_points(sensor, radius)
-    #     diamonds.update(edges)
-    # logging.debug(diamonds)
-    # for y in range(0, 21):
-    #     line = f"{y:>2} "
-    #     for x in range(0, 21):
-    #         if (x, y) in diamonds:
-    #             line += '#'
-    #         else: line += '.'
-    #     logging.debug(line)
+    sensors = locate_sensors(input_data)
 
     distress_beacon_location = None
-    for (sensor, radius) in sensors:
+    for (sensor, radius, corners) in sensors:
         for adjacent_point in find_perimeter_points(sensor, radius, coord_max):
             seen = False
-            for (other_sensor, other_radius) in sensors:
-                logging.debug(f"Checking point {adjacent_point} from sensor at {sensor} against sensor {other_sensor} with radius {other_radius}")
+            for (other_sensor, other_radius, other_corners) in sensors:
+                # logging.debug(f"Checking point {adjacent_point} from sensor at {sensor} against sensor {other_sensor} with radius {other_radius}")
                 if other_sensor == sensor:
-                    logging.debug("is same sensor")
+                    # logging.debug("is same sensor")
                     continue
-                if can_see(other_sensor, other_radius, adjacent_point):
-                    logging.debug("can see")
+                if can_see(other_sensor, other_radius, other_corners, adjacent_point):
+                    # logging.debug("can see")
                     seen = True
                     break
             if not seen:

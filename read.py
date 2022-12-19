@@ -7,10 +7,20 @@ logging.basicConfig(
     # filename='output.log'
 )
 
+TEST = 'test'
+CUSTOM = 'custom'
+REAL = 'real'
+
 if __name__ == '__main__':
-    with open('test_input.txt') as input_file:
-    # with open('customtest_input.txt') as input_file:
-    # with open('input.txt') as input_file:
+    mode = TEST
+
+    filename = 'test_input.txt'
+    if mode == REAL:
+        filename = 'input.txt'
+    elif mode == CUSTOM:
+        filename = 'customtest_input.txt'
+
+    with open(filename) as input_file:
         input_data = [line.rstrip('\n') for line in input_file]
 
     # for line_index,line in enumerate(input_data):

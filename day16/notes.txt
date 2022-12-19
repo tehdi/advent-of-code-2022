@@ -1,0 +1,32 @@
+you have 30 minutes before the volcano erupts
+a network of pipes and pressure-release valves
+each valve's flow rate if it were opened (in pressure per minute)
+the tunnels you could use to move between the valves
+
+one minute to open a single valve
+one minute to follow any tunnel from one valve to another
+
+Part 1
+Work out the steps to release the most pressure in 30 minutes. What is the most pressure you can release?
+Test: 1651
+
+My "random attempts" solution worked:
+New best flow after 0 more runs! 669
+New best flow after 4 more runs! 671
+New best flow after 1 more runs! 801
+New best flow after 7 more runs! 829
+New best flow after 2 more runs! 1153
+New best flow after 50 more runs! 1518
+New best flow after 197 more runs! 1583
+New best flow after 3544 more runs! 1606
+New best flow after 7343 more runs! 1635
+New best flow after 14766 more runs! 1646
+New best flow after 4202 more runs! 1670
+New best flow after 37816 more runs! 1818
+New best flow after 2441 more runs! 1845
+New best flow after 180610 more runs! 1888
+New best flow after 18791 more runs! 1906 <-- is the right answer!
+
+Part 2
+With you and an elephant working together for 26 minutes, what is the most pressure you could release?
+

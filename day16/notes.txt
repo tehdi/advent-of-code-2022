@@ -29,4 +29,47 @@ New best flow after 18791 more runs! 1906 <-- is the right answer!
 
 Part 2
 With you and an elephant working together for 26 minutes, what is the most pressure you could release?
+Test: 1707
+    I've gotten this in [1, 3108] attempts. Ah, randomness
 
+Attempts:
+    2432 is too low
+    2483 is still too low
+    2496 is still too low
+    2500 is also wrong, and now that I've guessed wrong 4 times I have an extended 5 minute wait timer until I can try again
+        that doesn't really matter since it took an hour to get to 2500
+
+Read these:
+    https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+    https://www.reddit.com/r/adventofcode/comments/zo21au/2022_day_16_approaches_and_pitfalls_discussion/
+    https://github.com/ChrisWojcik/advent-of-code-2022/blob/main/16/2.py
+        explanation: https://www.reddit.com/r/adventofcode/comments/zn6k1l/2022_day_16_solutions/j0xbg57/
+
+More tests from https://www.reddit.com/r/adventofcode/comments/znklnh/2022_day_16_some_extra_test_cases_for_day_16/
+1
+Part 1: 2640
+2640 |AA|FA|GA|HA|IA|JA|KA|LA|MA|NA|OA|PA
+Part 2: 2670
+1240 |AA|DA|EA|FA|GA|HA|IA|JA|CA
+1430 |AA|KA|LA|MA|NA|OA|PA
+
+2
+Part 1: 13468
+13468 |AA|IA|JA|KA|LA|MA|NA|OA|PA
+Part 2: 12887
+4857 |AA|FA|GA|HA|IA|JA|KA|EA|DA
+8030 |AA|LA|MA|NA|OA|PA
+
+3
+Part 1: 1288
+1288 |AA|CA|EA|GA|IA|KA|MA|NA|OA|PA|BA
+Part 2: 1484
+794 |AA|CA|EA|GA|IA|HA|FA|DA
+690 |AA|OA|MA|KA|JA|LA|NA|PA|BA
+
+4
+Part 1: 2400
+2400 |AA|CK|CX|CZ|CY|CW
+Part 2: 3680
+1840 |AA|AK|AW|AX|AY|AZ
+1840 |AA|CK|CZ|CX|CY|CW

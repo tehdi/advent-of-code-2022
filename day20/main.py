@@ -57,14 +57,19 @@ class List:
             return
         steps = abs(node.value) % (self.length - 1)
         logging.debug(f"  needs to move {steps} steps")
-        new_previous, new_next = self.find_node(node, steps, node.value > 0)
+        previous = node.previous
+        if node.value < 0: steps -= 1
 
-        logging.debug(f"  new previous: {new_previous}; next: {new_next}")
         # disconnect from old position
         old_previous = node.previous
         old_next = node.next
         old_previous.next = old_next
         old_next.previous = old_previous
+        node.previous = None
+        node.next = None
+
+        new_previous, new_next = self.find_node(previous, steps, node.value > 0)
+        logging.debug(f"  new previous: {new_previous}; next: {new_next}")
 
         # connect to new position
         new_previous.next = node
@@ -125,27 +130,3 @@ if __name__ == '__main__':
     coordinate_3000 = node_3000.value
     logging.info(f"Grove coordinates: {coordinate_1000}, {coordinate_2000}, {coordinate_3000}")
     logging.info(f"Coordinate sum: {coordinate_1000 + coordinate_2000 + coordinate_3000}")
-
-# test:
-#   input:  [1, 2, -3, 3, -2, 0, 4]
-#   output: [1, 2, -3, 4, 0, 3, -2]
-#   coordinates: 4, -3, 2
-#   coordinate sum: 3
-# test2 https://www.reddit.com/r/adventofcode/comments/zr29qd/2022_day_20_part_1_python_hidden_edge_case/j11bcdy/
-#   input: 0 -1 -1 1
-#   in-between steps:
-#       0 -1 -1 1 after moving 0
-#       1 -1 0 -1 after moving -1
-#       0 1 -1 -1 after moving -1
-#   output: -1 1 -1 0
-#   coordinates: 0, 0, 0
-#   sum: 0
-# test3 (wraps!) https://www.reddit.com/r/adventofcode/comments/zr29qd/2022_day_20_part_1_python_hidden_edge_case/j11d86z/
-#   input: 1, 2, -3, 3, -2, 0, 8
-#   sum: 7
-#   -> I get 7 if I use abs(value) % (length - 1)
-#   -> I get 0 if I use abs(value) % length
-# not test:
-#    2511 - moving abs(value)
-#   11807 - moving abs(value) % (length - 1), which is too low even though test3 above works. I think the problem is if it wraps multiple times?
-#   12962 is too low - moving abs(value) % length

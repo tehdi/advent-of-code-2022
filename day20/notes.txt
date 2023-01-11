@@ -7,3 +7,29 @@ the grove coordinates can be found by looking at the 1000th, 2000th, and 3000th 
 Part 1
 Mix your encrypted file exactly once.
 What is the sum of the three numbers that form the grove coordinates?
+
+test:
+  input:  [1, 2, -3, 3, -2, 0, 4]
+  output: [1, 2, -3, 4, 0, 3, -2]
+  coordinates: 4, -3, 2
+  coordinate sum: 3
+test2 https://www.reddit.com/r/adventofcode/comments/zr29qd/2022_day_20_part_1_python_hidden_edge_case/j11bcdy/
+  input: 0 -1 -1 1
+  in-between steps:
+      0 -1 -1 1 after moving 0
+      1 -1 0 -1 after moving -1
+      0 1 -1 -1 after moving -1
+  output: -1 1 -1 0
+  coordinates: 0, 0, 0
+  sum: 0
+test3 (wraps!) https://www.reddit.com/r/adventofcode/comments/zr29qd/2022_day_20_part_1_python_hidden_edge_case/j11d86z/
+  input: 1, 2, -3, 3, -2, 0, 8
+  sum: 7
+  -> I get 7 if I use abs(value) % (length - 1)
+  -> I get 0 if I use abs(value) % length
+not test:
+   2511 - moving abs(value)
+  11807 - moving abs(value) % (length - 1), which is too low even though test3 above works. I think the problem is if it wraps multiple times?
+  12962 is too low - moving abs(value) % length
+  13183 is what I get if I remove the node from the list before looking for its new position, and using %length-1 of course
+      this is the expected answer

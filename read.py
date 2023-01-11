@@ -1,27 +1,36 @@
 import logging
+import argparse
 
-logging.basicConfig(
-    format='%(message)s',
-    level=logging.DEBUG,
-    # level=logging.INFO,
-    # filename='output.log'
-)
-
-TEST = 'test'
-CUSTOM = 'custom'
-REAL = 'real'
+def configure_logging(verbose, output_file):
+    log_level = logging.DEBUG if verbose else logging.INFO
+    if output_file is None:
+        logging.basicConfig(
+            format='%(message)s',
+            level=log_level
+        )
+    else:
+        logging.basicConfig(
+            format='%(message)s',
+            level=log_level,
+            filename=output_file
+        )
 
 if __name__ == '__main__':
-    mode = TEST
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '-f', '--input-file', default='input.txt')
+    parser.add_argument('-o', '--output-file', default=None)
+    parser.add_argument('-v', '--verbose', '--debug', default=False, action='store_true')
+    args = parser.parse_args()
+    configure_logging(args.verbose, args.output_file)
 
-    filename = 'test_input.txt'
-    if mode == REAL:
-        filename = 'input.txt'
-    elif mode == CUSTOM:
-        filename = 'customtest_input.txt'
-
+    filename = args.input_file
     with open(filename) as input_file:
-        input_data = [line.rstrip('\n') for line in input_file]
+        # all at once:
+        # input_data = [line.rstrip('\n') for line in input_file]
+
+        # line by line:
+        # while (line := input_file.readline().rstrip()):
+        #     pass
 
     # for line_index,line in enumerate(input_data):
     for line in input_data:

@@ -1,0 +1,18 @@
+Each monkey yells a number
+Some of them are already known,
+others are waiting to hear two other monkeys' numbers so they can do math then yell the result
+
+They don't get yelled in the order given in the input
+They all yell whenever they know their answer
+
+Eg.
+    dvpt: 3
+    root: humn - dvpt
+    humn: 5
+root will yell (5-3=)2
+
+- both test_input and input have only unique monkey names
+    i.e. in an input file, if there's a monkey name "humn", then there is only one monkey named "humn"
+
+Part 1
+What number will the monkey named root yell?

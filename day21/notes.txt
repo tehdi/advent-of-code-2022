@@ -16,3 +16,23 @@ root will yell (5-3=)2
 
 Part 1
 What number will the monkey named root yell?
+
+Part 2
+The correct operation for monkey root should be =, which means that it still listens for two numbers (from the same two monkeys as before), but now checks that the two numbers match
+"humn" isn't a monkey, it's me
+you need to figure out what number you need to yell so that root's equality check passes. (The number that appears after humn: in your input is now irrelevant.)
+What number do you yell to pass root's equality test?
+
+step the math backwards
+find which side my call goes on. eval the other to get the target
+then run down the tree of operations and solve for the missing piece
+do this all the way down until you have a value for humn
+in test_input, that means:
+    humn is on the left
+    right evals to 150
+    left:
+        pppw = cczh / 4 => 150 = cczh / 4 => cczh = 600
+        cczh = 4 + lgvd => 600 = 4 + lgvd => lgvd = 596
+        lgvd = 2 x ptdq => 596 = 2 x ptdq => ptdq = 298
+        ptdq = humn - 3 => 298 = humn - 3 => humn = 301
+I should yell 301

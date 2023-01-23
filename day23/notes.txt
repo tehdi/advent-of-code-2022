@@ -30,3 +30,8 @@ test_input outcome:
         .....
         ..#..
     which is 6 lines * 5 columns = 30 ground tiles
+
+Part 2
+What is the number of the first round where no Elf moves?
+
+test2_input: 20

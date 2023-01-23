@@ -1,0 +1,32 @@
+Phase 1
+each Elf considers the eight positions adjacent to themself (NW, N, NE, E, SE, S, SW, W).
+If there are no adjacent Elves: do nothing
+Else:
+    A: no Elf N, NE, NW: proposes moving 1 step N
+    B: no Elf S, SE, SW: proposes moving 1 step S
+    C: no Elf W, NW, SW: proposes moving 1 step W
+    D: no Elf E, NE, SE: proposes moving 1 step E
+
+Phase 2
+try to move in the chosen direction (if any)
+if more than one Elf tries to move there, none of them move
+
+Phase 3
+rotate direction options A-D
+so in round 1 they look N first
+but in round 2 they look S first
+
+Part 1
+Find the smallest rectangle that contains the Elves after 10 rounds.
+Don't worry about diagonals; the edges of the rectangle should be aligned to the N/S/E/W directions
+How many empty ground tiles does that rectangle contain?
+
+test_input outcome:
+    after 3 rounds, nobody has to move anymore and they end up here:
+        ..#..
+        ....#
+        #....
+        ....#
+        .....
+        ..#..
+    which is 6 lines * 5 columns = 30 ground tiles

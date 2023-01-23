@@ -1,1 +1,1 @@
-python3 -m cProfile main.py
+py3 -m cProfile main.py

@@ -18,17 +18,14 @@ def configure_logging(verbose, output_file):
 class Elf:
     def __init__(self, position):
         self.position = position
-        self.proposed = None
+        self.previous = None
 
-    def propose(self, proposed):
-        self.proposed = proposed
-
-    def move(self):
-        self.position = self.proposed
-        self.proposed = None
+    def move_to(self, position):
+        self.previous = self.position
+        self.position = position
 
     def cancel_move(self):
-        self.proposed = None
+        self.position = self.previous
 
     def __str__(self):
         return f"{self.position}"
@@ -81,9 +78,6 @@ def west_of(position):
 def nw_of(position):
     return (position[0]-1, position[1]-1)
 
-def rotate(directions):
-    return directions[1:] + directions[:1]
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '-f', '--input-file', default='input.txt')
@@ -111,33 +105,27 @@ if __name__ == '__main__':
     round_number = 0
     while True:
         round_number += 1
+        moved = False
         current_positions = set([elf.position for elf in elves])
-        proposals = set()
-        conflicts = set()
+        new_positions = {}
         for elf in elves:
             position = elf.position
-            if around.is_empty(position, current_positions):
-                elf.propose(None)
-            else:
+            if not around.is_empty(position, current_positions):
                 for direction in directions:
                     if direction.is_empty(position, current_positions):
-                        elf.propose(direction.get_move_from(position))
+                        new_position = direction.get_move_from(position)
+                        if new_position not in new_positions:
+                            logging.debug(f"Elf {elf} wants to move to {new_position}")
+                            elf.move_to(new_position)
+                            new_positions[new_position] = elf
+                            moved = True
+                        elif (other_elf := new_positions[new_position]) is not None:
+                            other_elf.cancel_move()
+                            new_positions[new_position] = None
+                            logging.debug(f"Elf {elf} wants to move to {new_position} but {other_elf} is already moving there. Cancelling both.")
                         break
-            if elf.proposed is None:
-                logging.debug(f"Elf {elf} doesn't want to move")
-            elif elf.proposed in proposals:
-                conflicts.add(elf.proposed)
-            else:
-                proposals.add(elf.proposed)
-        if len(proposals) == 0:
-            logging.info(f"At round {round_number}, nobody wants to move!")
+        if not moved:
+            logging.info(f"Nobody moved in round {round_number}.")
+            logging.debug([str(elf) for elf in elves])
             break
-        for elf in elves:
-            if elf.proposed is None: continue
-            if elf.proposed not in conflicts:
-                logging.debug(f"Elf {elf} is moving to {elf.proposed}")
-                elf.move()
-            else:
-                logging.debug(f"Elf {elf} has a conflict and is not moving to {elf.proposed}")
-                elf.cancel_move()
-        directions = rotate(directions)
+        directions = directions[1:] + directions[:1]

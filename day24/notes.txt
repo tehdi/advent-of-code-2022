@@ -1,0 +1,21 @@
+The walls of the valley are drawn as #
+everything else is ground
+Clear ground - where there is currently no blizzard - is drawn as .
+Otherwise, blizzards are drawn with an arrow indicating their direction of motion:
+    up (^)
+    down (v)
+    left (<)
+    right (>)
+
+when a blizzard reaches the wall of the valley, a new blizzard forms on the opposite side of the valley moving in the same direction
+multiple blizzards can occupy the same space
+Your expedition begins in the only non-wall position in the top row
+your goal is the only non-wall position in the bottom row
+each minute, you can move up, down, left, or right, or you can wait in place
+You and the blizzards act simultaneously
+you cannot share a position with a blizzard
+
+Part 1
+What is the fewest number of minutes required to avoid the blizzards and reach the goal?
+
+test_input: 18 minutes

@@ -9,6 +9,7 @@ one minute to follow any tunnel from one valve to another
 Part 1
 Work out the steps to release the most pressure in 30 minutes. What is the most pressure you can release?
 Test: 1651
+Valve open order: DD BB JJ HH EE CC
 
 My "random attempts" solution worked:
 New best flow after 0 more runs! 669
@@ -42,6 +43,7 @@ Attempts:
 Read these:
     https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
     https://www.reddit.com/r/adventofcode/comments/zo21au/2022_day_16_approaches_and_pitfalls_discussion/
+***!!!        main 1.3 = https://www.reddit.com/r/adventofcode/comments/zo21au/2022_day_16_approaches_and_pitfalls_discussion/j0nz8df/
     https://github.com/ChrisWojcik/advent-of-code-2022/blob/main/16/2.py
         explanation: https://www.reddit.com/r/adventofcode/comments/zn6k1l/2022_day_16_solutions/j0xbg57/
 

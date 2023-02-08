@@ -1,5 +1,21 @@
+import argparse
 import logging
 import time
+
+def configure_logging(verbose, output_file):
+    log_level = logging.DEBUG if verbose else logging.INFO
+    if output_file is None:
+        logging.basicConfig(
+            format='%(message)s',
+            level=log_level
+        )
+    else:
+        logging.basicConfig(
+            format='%(message)s',
+            level=log_level,
+            filename=output_file,
+            filemode='w'
+        )
 
 class ShapeNode:
     def __init__(self, coordinates):
@@ -68,31 +84,20 @@ SHAPE_5 = ShapeNode([(0, 0), (1, 0), (0, 1), (1, 1)])
 
 DIRECTION = { '>': 1, '<': -1 }
 
-logging.basicConfig(
-    format='%(message)s',
-    level=logging.DEBUG,
-    # level=logging.INFO,
-    # filename='output.log'
-)
-
 # Part 1
 TOTAL_ROCKS = 2022
 # Part 2. My god, it's full of zeroes...
 # TOTAL_ROCKS = 1_000_000_000_000
 
-TEST = 'test'
-CUSTOM = 'custom'
-REAL = 'real'
-
 if __name__ == '__main__':
-    mode = REAL
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input-file', default='input.txt')
+    parser.add_argument('-o', '--output-file', default=None)
+    parser.add_argument('-v', '--verbose', '--debug', default=False, action='store_true')
+    args = parser.parse_args()
+    configure_logging(args.verbose, args.output_file)
 
-    filename = 'test_input.txt'
-    if mode == REAL:
-        filename = 'input.txt'
-    elif mode == CUSTOM:
-        filename = 'customtest_input.txt'
-
+    filename = args.input_file
     with open(filename) as input_file:
         input_data = [line.rstrip('\n') for line in input_file]
 
@@ -140,16 +145,6 @@ if __name__ == '__main__':
             shape_node = shape_node.next
             shape_node.start_at((start_x_offset, highest_y + start_y_offset))
             jet = True
-
-            # logging.debug('')
-            # for y in range(10, -1, -1):
-            #     line = f'{y:>2} '
-            #     for x in range(7):
-            #         if (x, y) in shape_node.coordinates: line += '#'
-            #         elif (x, y) in cave: line += '*'
-            #         else: line += '.'
-            #     logging.debug(line)
-            # time.sleep(0.5)
             continue
 
         x, y = 0, 0
@@ -166,13 +161,4 @@ if __name__ == '__main__':
             shape_node.move_to(new_position)
         jet = not jet
 
-        # logging.debug('')
-        # for y in range(10, -1, -1):
-        #     line = f'{y:>2} '
-        #     for x in range(7):
-        #         if (x, y) in shape_node.coordinates: line += '#'
-        #         elif (x, y) in cave: line += '*'
-        #         else: line += '.'
-        #     logging.debug(line)
-        # time.sleep(0.5)
     logging.info(f"Tower height after {rocks_landed} rocks have landed: {highest_y + 1}")

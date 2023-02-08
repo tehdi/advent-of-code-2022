@@ -86,8 +86,6 @@ DIRECTION = { '>': 1, '<': -1 }
 
 # Part 1
 TOTAL_ROCKS = 2022
-# Part 2. My god, it's full of zeroes...
-# TOTAL_ROCKS = 1_000_000_000_000
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

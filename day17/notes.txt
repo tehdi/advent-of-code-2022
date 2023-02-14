@@ -31,3 +31,20 @@ Test: 3068
 Part 2
 1_000_000_000_000 rocks!
 Test: 1_514_285_714_288
+
+Real input goes in cycles of 1720 rocks
+floor(1_000_000_000_000 / 1720) = 581_395_348 complete cycles
+1_000_000_000_000 % 1720 = 1_440 non-cycle rocks
+so start at rock 1_440, which is height 2_286
++ 1720 rocks = 3_160
+height at 3_160 = 4_988
+= height diff of 2_702 per cycle
+
+Found a repeated state at rock 3160: Cave profile: (0, 21, 29, 29, 25, 27, 16), Shape: 5, Direction: 8455
+Rock count: 1440 -> 3160 = 1720
+Height: 2286 -> 4988 = 2702
+
+base height of 2_286
++ 581_395_348 cycles of height 2_702 each
+= 2_286 + (581_395_348 * 2_702)
+= final height of 1_570_930_232_582

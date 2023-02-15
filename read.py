@@ -12,7 +12,8 @@ def configure_logging(verbose, output_file):
         logging.basicConfig(
             format='%(message)s',
             level=log_level,
-            filename=output_file
+            filename=output_file,
+            filemode='w'
         )
 
 if __name__ == '__main__':

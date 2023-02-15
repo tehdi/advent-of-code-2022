@@ -23,3 +23,20 @@ where adjacent means any of:
     (x, y-1, z)
     (x, y, z+1)
     (x, y, z-1)
+
+
+Part 2
+your calculation also included the surface area of air pockets trapped in the lava droplet
+Instead, consider only cube sides that could be reached by the water and steam as the lava droplet tumbles into the pond
+The steam will expand to reach as much as possible, completely displacing any air on the outside of the lava droplet but never expanding diagonally.
+
+In the example above, exactly one cube of air is trapped within the lava droplet (at 2,2,5), so the exterior surface area of the lava droplet is 58.
+
+Reddit suggests:
+    https://www.reddit.com/r/adventofcode/comments/zos5r9/2022_day_18_i_feel_like_im_missing_something/
+    shift coordinates if necessary to build a box around your lava where (0, 0, 0) is empty
+    fill in your lava cubes
+    then start at (0, 0, 0) and BFS a collection of adjacent non-lava cubes
+    for each cube that is adjacent to lava, mark it as a boundary
+    for each cube that is empty, mark it empty so you don't re-search it
+    after searching, go back and count all the lava adjacent to the cubes you marked as boundaries (or just count them as you go. that seems easier)

@@ -1,0 +1,25 @@
+approximates the shape of the lava droplet with 1x1x1 cubes on a 3D grid
+each given as its x,y,z position
+count the number of sides of each cube that are not immediately connected to another cube
+if your scan were only two adjacent cubes like 1,1,1 and 2,1,1
+    each cube would have a single side covered
+    and five sides exposed
+    for a total surface area of 10 sides
+
+Part 1
+What is the surface area of your scanned lava droplet?
+
+Test: 64
+
+Real
+2830 1x1x1 cubes
+set of 3ples => set((5, 9, 13), (6, 8, 3), ...)
+for each cube in the set,
+    exposed sides = 6 - number of adjacent cubes
+where adjacent means any of:
+    (x+1, y, z)
+    (x-1, y, z)
+    (x, y+1, z)
+    (x, y-1, z)
+    (x, y, z+1)
+    (x, y, z-1)

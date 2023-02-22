@@ -1,0 +1,51 @@
+you start with exactly one ore-collecting robot
+Each robot can collect 1 of its resource type per minute.
+It takes one minute for the robot factory to construct any type of robot, although it consumes the necessary resources available when construction begins.
+quality level = blueprint's ID number x largest number of geodes that can be opened in 24 minutes using that blueprint
+
+Part 1
+Determine the quality level of each blueprint using the largest number of geodes it could produce in 24 minutes. What do you get if you add up the quality level of all of the blueprints in your list?
+
+Test:
+    blueprint 1:  9 =>  9
+    blueprint 2: 12 => 24
+                    =  33
+
+
+Notes from Reddit:
+Go from build to build, not from minute to minute.
+Don't build so many of a particular bot that you get more resources than you can use per minute.
+Don't build something this minute that you could have built last minute. You decided not to build it for a reason.
+    this goes hand-in-hand with "build to build, not minute to minute"
+Just because you can build an obsidian or geode bot doesn't mean you should. Sometimes (early?) you need to expand your base first.
+A really easy-to-calculate upper bound is "what if I could build a geode bot every turn?"
+You can prune any path that doesn't have a possibility of producing more geodes than you've seen from another path.
+DFS will reach a terminal state before BFS, and should give you more pruning options.
+The question is about how many geodes you can get, not about how you get there.
+Credit geodes right away instead of tracking per-minute geode income.
+In the last minute, you do nothing. In the second-to-last minute, the only thing worth building is a geode bot.
+
+https://www.reddit.com/r/adventofcode/comments/zpnkbm/2022_day_19_i_think_ill_just_lolnope_out_of_it/j0v7gh6/
+store the current set of resources in the state as a placeholder value
+    infinite if the amount of resources plus the amount that will be gained by current robots up to 1 time step before the end is more than could be used by building the robot that uses the most of that resource on every single upcoming timestep
+        for a given resource R and time remaining T:
+            rMaxBot = bot that takes the most R to build
+            if stock[R] + production[R] >= amount of R needed to build T-1 rMaxBots
+                don't build any more R-bots
+    For example: If you currently have 80 ore, 6 minutes left and the most expensive robot costs 10 ore, you effectively have infinite ore
+At each step I check how long it will take to build each type of robot, and then a recursive call with the state that will be when that robot can be made.
+    If the next robot you are going to be building is type X, there is no advantage to building it later than the first point where it can be made.
+
+https://www.reddit.com/r/adventofcode/comments/zpnkbm/2022_day_19_i_think_ill_just_lolnope_out_of_it/j0v2d46/
++
+https://www.reddit.com/r/adventofcode/comments/zpnkbm/2022_day_19_i_think_ill_just_lolnope_out_of_it/j55696k/
+similar problem where I'm allowed to build any robot in a turn and resources used to build a kind of robot are not counted as used when building another kind of robot
+keep n_robots copies of the resources, each associated to a kind of robot
+for each remaining turn:
+    for each kind of robot, if possible, create a new one using resources from its own copy of resources
+    for each robot, produce its resource (like you normally do, i.e. without considering the robot(s) just created) and add it to each copy of the resources
+
+https://www.reddit.com/r/adventofcode/comments/zpnkbm/2022_day_19_i_think_ill_just_lolnope_out_of_it/j0v9ssh/
+A*, where every node simply creates a followup node for the next day for either building nothing or for any possible build order
+brute force
+upper bound for the A* for a given state I simply assumed that until the last turn each building was built as soon as possible, with the build cost not counting against the other buildings.

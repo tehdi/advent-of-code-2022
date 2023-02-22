@@ -12,6 +12,14 @@ Test:
                     =  33
 
 
+Part 2
+32 minutes but only the first 3 blueprints
+Determine the largest number of geodes you could open using each of the first three blueprints. What do you get if you multiply these numbers together?
+
+Adding a check for whether I could outdo my current best by building 1 geobot per minute from here...
+massive improvement. lots of paths no longer need to be checked.
+
+
 Notes from Reddit:
 Go from build to build, not from minute to minute.
 Don't build so many of a particular bot that you get more resources than you can use per minute.

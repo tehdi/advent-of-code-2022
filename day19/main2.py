@@ -19,7 +19,7 @@ def configure_logging(verbose, output_file):
             filemode='w'
         )
 
-MINUTES = 24
+MINUTES = 32
 ORE = "ore"
 CLAY = "clay"
 OBSIDIAN = "obsidian"
@@ -128,11 +128,15 @@ def find_best_geodes(blueprint):
             credit_income(income, resources, wait_time+1)
             build_bot(resource, blueprint.robot_costs[resource], resources, income)
             build_paths.append((time_remaining, resources, income))
+    iterations = 0
     while len(build_paths) > 0:
-        # logging.debug(f"{len(build_paths)} paths to follow")
         (time_remaining, resources, income) = build_paths.popleft()
-        # logging.debug(f"Path: {time_remaining} {resources} {income}")
+        if iterations % 1_000_000 == 0:
+            logging.debug(f"Blueprint {blueprint.blueprint_id}: {len(build_paths)} paths to follow")
+            logging.debug(f"Path: {time_remaining} {resources} {income}")
+        iterations += 1
         if (geodes := resources[GEODE]) > best_geodes: best_geodes = geodes
+        # this saves so many iterations. SO. MANY.
         if max_geodes_from_here(income, resources, time_remaining) < best_geodes: continue
         if time_remaining < 2:
             credit_income(income, resources, time_remaining)
@@ -164,11 +168,11 @@ if __name__ == '__main__':
     with open(filename) as input_file:
         while (line := input_file.readline().rstrip()):
             blueprints.append(extract_blueprint(line_pattern, line))
+            if len(blueprints) == 3: break
 
-    total_quality = 0
+    top_three_product = 1
     for blueprint in blueprints:
         best_geodes = find_best_geodes(blueprint)
-        quality_level = blueprint.blueprint_id * best_geodes
-        total_quality += quality_level
-        logging.debug(f"Blueprint {blueprint.blueprint_id}: quality level = {quality_level}, geodes = {best_geodes}")
-    logging.info(f"Total quality: {total_quality}")
+        top_three_product *= best_geodes
+        logging.debug(f"Blueprint {blueprint.blueprint_id}: geodes = {best_geodes}")
+    logging.info(f"Top 3 multiplied together: {top_three_product}")

@@ -1,0 +1,28 @@
+Part 2
+the example input and the real input are different shapes
+
+this is the real input:
+  1 2
+  3
+4 5
+6
+also you built a paper cube because wow these transformations
+
+29302 is too low
+after fixing my out-of-bounds wrapping, I think, 54206 is also too low
+after breaking things and apparently not fixing enough, 174190 is too high
+
+test2: 10006
+from https://www.reddit.com/r/adventofcode/comments/zst7z3/2022_day_22_part_2_improved_example_input_working/
+I'm getting (9, 0) facing right = 10004
+but the actual answer should have me facing left, which would be +2 = 10006
+so I think my travel logic is correct but something's weird with my final facing
+Oh! The final steps try to cross a boundary but hit a wall before jumping that edge
+I've adjusted the final facing to reflect the transition, but that transition doesn't actually happen
+
+after fixing that final facing problem, I got 104385
+that is way too much differential for just a facing change. what did I even do
+at any rate, THAT'S THE RIGHT ANSWER! :D
+
+I bet there was more than one spot where I tried to cross an edge and didn't make it because of a wall
+thanks bonus reddit test case!

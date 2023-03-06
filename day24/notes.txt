@@ -24,3 +24,15 @@ test_input: 18 minutes
 - I actually should BFS this? Huh. Again? This is like the third day.
 - Oooooh, I can treat "position at a given minute" as a unique value that only ever needs to be explored once!
 -- ^^ this is the tip that got me across the goal posts :D
+
+
+Part 2
+What is the fewest number of minutes required to reach the goal, go back to the start, then reach the goal again?
+Because one of the Elves forgot his snacks.
+
+test input:
+    + out: 18 minutes
+    + back: 23 minutes
+        = 41 minutes
+    + and out again: 13 minutes
+    = total: 54 minutes

@@ -1,6 +1,7 @@
 import logging
 import argparse
 from collections import defaultdict
+from collections import deque
 
 def configure_logging(verbose, output_file):
     log_level = logging.DEBUG if verbose else logging.INFO
@@ -13,103 +14,87 @@ def configure_logging(verbose, output_file):
         logging.basicConfig(
             format='%(message)s',
             level=log_level,
-            filename=output_file
+            filename=output_file,
+            filemode='w'
         )
-
+WALL = '#'
+GROUND = '.'
+EXPEDITION = 'E'
 UP = '^'
 DOWN = 'v'
 LEFT = '<'
 RIGHT = '>'
+WAIT = 'z'
 BLIZZARD_CHARS = [UP, DOWN, LEFT, RIGHT]
-MOVEMENT_DIRECTIONS = {
+MOVEMENT_OPTIONS = {
     UP: (-1, 0),
-    'u': (-1, 0),
     DOWN: (+1, 0),
-    'd': (+1, 0),
     LEFT: (0, -1),
-    'l': (0, -1),
     RIGHT: (0, +1),
-    'r': (0, +1),
-    'w': (0, 0),
-    'z': (0, 0)
+    WAIT: (0, 0)
+}
+DIRECTIONS = {
+    (-1, 0): UP,
+    (+1, 0): DOWN,
+    (0, -1): LEFT,
+    (0, +1): RIGHT,
+    (0, 0): WAIT
 }
 
-class Blizzard:
-    def __init__(self, position, direction):
-        self.position = position
-        self.direction = direction
-
-    def move(self, walls, max_line_index, max_column_index):
-        line = self.position[0]
-        column = self.position[1]
-        if self.direction == UP: self.position = (line-1, column)
-        elif self.direction == DOWN: self.position = (line+1, column)
-        elif self.direction == LEFT: self.position = (line, column-1)
-        elif self.direction == RIGHT: self.position = (line, column+1)
-        self.wrap(walls, max_line_index, max_column_index)
-
-    def wrap(self, walls, max_line_index, max_column_index):
-        if self.position in walls:
-            line = self.position[0]
-            column = self.position[1]
-            if line <= 0 and self.direction == UP:
-                self.position = (max_line_index, column)
-            elif line > max_line_index and self.direction == DOWN:
-                self.position = (1, column)
-            elif column <= 0 and self.direction == LEFT:
-                self.position = (line, max_column_index)
-            elif column > max_column_index and self.direction == RIGHT:
-                self.position = (line, 1)
-
-def is_wall(char):
-    return char == '#'
 def is_blizzard(char):
     return char in BLIZZARD_CHARS
 
-def print_valley(expedition, blizzards, walls, lines, columns):
-    for line_index in range(lines):
+def print_valley(expedition, blizzards, walls, line_count, column_count):
+    for line_index in range(line_count):
         output = ''
-        for column_index in range(columns):
+        for column_index in range(column_count):
             position = (line_index, column_index)
-            if position == expedition: output += 'E'
-            elif position in walls: output += '#'
+            if position == expedition: output += EXPEDITION
+            elif position in walls: output += WALL
             elif position in blizzards:
-                if len(blizzards[position]) == 1: output += blizzards[position][0].direction
+                if len(blizzards[position]) == 1:
+                    output += DIRECTIONS[blizzards[position][0]]
                 else: output += str(len(blizzards[position]))
-            else: output += '.'
+            else: output += GROUND
         logging.debug(output)
     logging.debug('')
 
-def move_blizzards(blizzards, walls, lines, columns):
+def wrap_value(value, minimum, maximum):
+    if value < minimum: return maximum
+    if value > maximum: return minimum
+    return value
+
+def move_blizzard(position, direction, max_line_index, max_column_index):
+    line = position[0] + direction[0]
+    column = position[1] + direction[1]
+    line = wrap_value(line, 1, max_line_index)
+    column = wrap_value(column, 1, max_column_index)
+    return (line, column)
+
+def move_blizzards(blizzards, max_line_index, max_column_index):
     new_blizzards = defaultdict(list)
-    for blizzard_list in blizzards.values():
-        for blizzard in blizzard_list:
-            # logging.debug(f"Moving blizzard at {blizzard.position} in direction {blizzard.direction}")
-            blizzard.move(walls, lines-2, columns-2)
-            new_position = blizzard.position
-            # logging.debug(f" ended up at {new_position}")
-            new_blizzards[new_position].append(blizzard)
+    for position,directions in blizzards.items():
+        for direction in directions:
+            new_position = move_blizzard(position, direction, max_line_index, max_column_index)
+            new_blizzards[new_position].append(direction)
     return new_blizzards
 
-def move_expedition(expedition):
-    new_position = expedition
-    valid_move = True
-    exit_requested = False
-    movement_direction = input('Which way do you want to move? (^u vd <l >r or x to exit) ')
-    if movement_direction == 'x':
-        exit_requested = True
-    elif movement_direction in MOVEMENT_DIRECTIONS:
-        movement = MOVEMENT_DIRECTIONS[movement_direction]
-        new_position = (expedition[0] + movement[0], expedition[1] + movement[1])
-        if new_position in walls:
-            print('That will take you into a wall.')
-            valid_move = False
-        elif new_position in blizzards:
-            print(f"That will take you into a blizzard! ({[blizzard.direction for blizzard in blizzards[new_position]]})")
-            valid_move = False
-        else:
-            new_position = (expedition[0] + movement[0], expedition[1] + movement[1])
-    return (new_position, valid_move, exit_requested)
+def map_blizzards(minute, blizzards_by_minute, max_line_index, max_column_index):
+    if minute in blizzards_by_minute: return blizzards_by_minute[minute]
+    previous_minute_blizzards = map_blizzards(minute-1, blizzards_by_minute, max_line_index, max_column_index)
+    blizzard = move_blizzards(previous_minute_blizzards, max_line_index, max_column_index)
+    blizzards_by_minute[minute] = blizzard
+    return blizzard
+
+def in_order(minimum, middle, maximum):
+    return minimum <= middle <= maximum
+
+def can_move_to(position, blizzards, walls, start_position, destination, max_line_index, max_column_index):
+    return ((position == start_position or position == destination)
+        or ((1 <= position[0] <= max_line_index)
+            and (1 <= position[1] <= max_column_index)
+            and position not in blizzards
+            and position not in walls))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -120,40 +105,54 @@ if __name__ == '__main__':
     configure_logging(args.verbose, args.output_file)
 
     filename = args.input_file
-    expedition = None
+    start_position = None
+    destination = None
     blizzards = defaultdict(list)
     walls = []
-    columns = None
+    column_count = None
     with open(filename) as input_file:
         line_index = 0
         while (line := input_file.readline().rstrip()):
-            if columns is None: columns = len(line)
+            if column_count is None: column_count = len(line)
             for char_index,char in enumerate(line):
                 position = (line_index, char_index)
-                if expedition is None and char == '.':
-                    expedition = position
-                if is_wall(char):
-                    walls.append(position)
-                if is_blizzard(char):
-                    blizzards[position].append(Blizzard(position, char))
+                if is_blizzard(char): blizzards[position].append(MOVEMENT_OPTIONS[char])
+                if char == WALL: walls.append(position)
+                if start_position is None and char == GROUND: start_position = position
+                if char == GROUND: destination = position
             line_index += 1
-    lines = line_index
-    logging.debug('Minute 0')
-    print_valley(expedition, blizzards, walls, lines, columns)
+    line_count = line_index
+    max_line_index = line_count-2
+    max_column_index = column_count-2
 
-    minute = 0
-    while True:
-        minute += 1
-        blizzards = move_blizzards(blizzards, walls, lines, columns)
-        logging.debug(f"Minute {minute}")
-        if expedition in blizzards:
-            if len(blizzards[expedition]) == 1:
-                print(f"If you don't move you'll be in a blizzard moving {blizzards[expedition][0].direction}")
-            else:
-                print(f"If you don't move you'll be in multiple blizzards moving {[blizzard.direction for blizzard in blizzards[expedition]]}")
-        print_valley(expedition, blizzards, walls, lines, columns)
-        valid_move = exit_requested = False
-        while not valid_move and not exit_requested:
-            (new_position, valid_move, exit_requested) = move_expedition(expedition)
-        if exit_requested: break
-        expedition = new_position
+    blizzards_by_minute = { 0: blizzards }
+    positions_by_minute = defaultdict(set)
+    positions_by_minute[0].add(start_position)
+    fewest_minutes = None
+    path_options = deque([(0, start_position)])
+    iteration = 0
+    waits_queued = 0
+    while (o := len(path_options)) > 0:
+        (minute, position) = path_options.popleft()
+        # if already found a faster route, no sense calculating anything else from here
+        if fewest_minutes is not None and minute+1 > fewest_minutes: continue
+        blizzards = map_blizzards(minute, blizzards_by_minute, max_line_index, max_column_index)
+
+        if iteration % 100_000 == 0:
+            logging.debug(f"{iteration}: m{minute}, p{position}, w{waits_queued:,}, o{o:,}, f{fewest_minutes}")
+            #print_valley(position, blizzards, walls, line_count, column_count)
+        iteration += 1
+
+        for movement_option in MOVEMENT_OPTIONS.values():
+            new_position = (position[0]+movement_option[0], position[1]+movement_option[1])
+            if can_move_to(new_position, blizzards, walls, start_position, destination, max_line_index, max_column_index):
+                if new_position == destination:
+                    if fewest_minutes is None or minute < fewest_minutes: fewest_minutes = minute
+                else:
+                    if movement_option == MOVEMENT_OPTIONS[WAIT]: waits_queued += 1
+                    new_minute = minute + 1
+                    if new_position in positions_by_minute[new_minute]: continue
+                    path_options.append((new_minute, new_position))
+                    positions_by_minute[new_minute].add(new_position)
+
+    logging.info(f"Fastest route found took {fewest_minutes} minutes")

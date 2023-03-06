@@ -19,3 +19,8 @@ Part 1
 What is the fewest number of minutes required to avoid the blizzards and reach the goal?
 
 test_input: 18 minutes
+
+"Thanks Reddit!" moments:
+- I actually should BFS this? Huh. Again? This is like the third day.
+- Oooooh, I can treat "position at a given minute" as a unique value that only ever needs to be explored once!
+-- ^^ this is the tip that got me across the goal posts :D
